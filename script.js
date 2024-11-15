@@ -9,23 +9,11 @@ function getComputerChoice() {
 	return choices[randomIndex];
 }
 
-// Get human's choice with validation
-function getHumanChoice() {
-	while (true) {
-		const choice = prompt("Choose rock, paper or scissors")
-			.toLowerCase()
-			.trim();
-		if (["rock", "paper", "scissors"].includes(choice)) {
-			return choice;
-		}
-		console.log("Invalid choice! Please choose rock, paper, or scissors.");
-	}
-}
-
 // Play a single round
 function playRound(humanChoice, computerChoice) {
-	console.log(`Your choice: ${humanChoice}`);
-	console.log(`Computer's choice: ${computerChoice}`);
+	const resultDiv = document.getElementById("result");
+	resultDiv.innerText = `Your choice: ${humanChoice}`;
+	resultDiv.innerText += `\nComputer's choice: ${computerChoice}`;
 
 	if (humanChoice === computerChoice) {
 		return "It's a tie!";
@@ -42,37 +30,34 @@ function playRound(humanChoice, computerChoice) {
 	}
 }
 
-// Main game function
-function playGame() {
-	console.clear(); // Clear the console at the start
-	console.log("Welcome to Rock Paper Scissors!");
-	console.log("Playing 5 rounds...");
-	console.log("-----------------------");
-
-	humanScore = 0;
-	computerScore = 0;
-
-	for (let round = 1; round <= 5; round++) {
-		console.log(`\nRound ${round}:`);
-		const humanChoice = getHumanChoice();
-		const computerChoice = getComputerChoice();
-		const result = playRound(humanChoice, computerChoice);
-		console.log(result);
-		console.log(`Score - You: ${humanScore}, Computer: ${computerScore}`);
-	}
-
-	console.log("\n-----------------------");
-	console.log("Game Over!");
-	console.log(`Final Score - You: ${humanScore}, Computer: ${computerScore}`);
-
-	if (humanScore > computerScore) {
-		console.log("🎉 Congratulations! You win the game!");
-	} else if (humanScore < computerScore) {
-		console.log("💻 The computer wins the game!");
-	} else {
-		console.log("🤝 It's a tie game!");
+// Update scores and display results
+function updateGameResult(result) {
+	const resultDiv = document.getElementById("result");
+	resultDiv.innerText += `\n${result}`;
+	resultDiv.innerText += `\nScore - You: ${humanScore}, Computer: ${computerScore}`;
+	if (humanScore >= 5) {
+		resultDiv.innerText = "You win!";
+	} else if (computerScore >= 5) {
+		resultDiv.innerText = "Computer wins!";
 	}
 }
 
-// Start the game
-playGame();
+// Add event listeners to buttons
+document.getElementById("rock").addEventListener("click", () => {
+	const computerChoice = getComputerChoice();
+	const result = playRound("rock", computerChoice);
+	updateGameResult(result);
+});
+
+document.getElementById("paper").addEventListener("click", () => {
+	const computerChoice = getComputerChoice();
+	const result = playRound("paper", computerChoice);
+	updateGameResult(result);
+});
+
+document.getElementById("scissors").addEventListener("click", () => {
+	const computerChoice = getComputerChoice();
+	const result = playRound("scissors", computerChoice);
+	updateGameResult(result);
+});
+
